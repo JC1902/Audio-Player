@@ -3,7 +3,7 @@ export const FirstWave = (props) => (
     xmlns="http://www.w3.org/2000/svg"
     style={{
       width: "100%",
-      height: "100%",
+      height: "1000px",
       transform: "rotate(0deg)",
       transition: ".3s",
     }}
