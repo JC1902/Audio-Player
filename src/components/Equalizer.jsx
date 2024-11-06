@@ -13,6 +13,21 @@ const bands = [
   { frequency: 16000, type: 'highshelf' }
 ]
 
+function convert(value)
+{
+    if(value>=1000000)
+    {
+        value=(value/1000000)+"M"
+    }
+    else if(value>=1000)
+    {
+        value=(value/1000)+"K";
+    }
+    return value.toString();
+}
+
+const frequencyShort = bands.map((band) => convert(band.frequency));
+
 export default function Equalizer({ audioContext, mediaElementSource }) {
   const [filters, setFilters] = useState([])
 
@@ -52,18 +67,19 @@ export default function Equalizer({ audioContext, mediaElementSource }) {
   }
 
   return (
-    <div>
+    <div className="flex shrink items-center justify-center px-4 gap-4 mb-2 ">
       {filters.map((filter, index) => (
-        <div key={index} className="flex items-center gap-4 mb-2 ">
-          <label className='text-white'>{bands[index].frequency} Hz</label>
+        <div key={index} >
           <input
             type="range"
-            min="-30"
-            max="30"
+            min="-100"
+            max="100"
             step="1"
             value={filter.gain.value}
             onChange={(e) => handleGainChange(index, parseFloat(e.target.value))}
           />
+          <br></br>
+          <label className='text-white'>{frequencyShort[index]}Hz</label>
         </div>
       ))}
     </div>

@@ -1,0 +1,11 @@
+input[type="range"] {
+  writing-mode: vertical-lr;
+}
+
+.container-player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  text-wrap: pretty;
+}

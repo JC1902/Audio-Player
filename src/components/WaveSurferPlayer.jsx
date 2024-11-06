@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { PlayIcon, PauseIcon } from './Icons'
-import WaveSurfer from 'wavesurfer.js'
+import { PlayIcon, PauseIcon, UploadIcon } from './Icons'
 import Equalizer from './Equalizer'
+import WaveSurfer from 'wavesurfer.js'
+import MediaTags from './MediaTags'
 
 export default function WaveSurferPlayer() {
   const waveformRef = useRef(null)
@@ -11,8 +12,11 @@ export default function WaveSurferPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const [error, setError] = useState(null)
+
   const [audioContext, setAudioContext] = useState(null)
   const [mediaElementSource, setMediaElementSource] = useState(null)
+
+  const [audioFile, setAudioFile] = useState(null)
 
   const initializeWaveSurfer = async () => {
     if (waveformRef.current && !wavesurferRef.current) {
@@ -61,6 +65,7 @@ export default function WaveSurferPlayer() {
     const file = event.target.files[0]
     if (file) {
       const url = URL.createObjectURL(file)
+      setAudioFile(file)
       setAudioUrl(url)
       setError(null) // Reset error when a new file is selected
     }
@@ -94,7 +99,10 @@ export default function WaveSurferPlayer() {
           className="w-full h-52 p-6 mb-4 bg-black border-2 border-white rounded-lg"
         />
 
-        <section className="flex items-center justify-center gap-6">
+        <section className="container-player">
+
+          { audioFile && <MediaTags audioFile={audioFile} className='grow' /> }
+
           <label className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-300 transition-colors">
             <input
               type="file"
@@ -102,12 +110,12 @@ export default function WaveSurferPlayer() {
               onChange={handleFileChange}
               style={{ display: "none" }}
             />
-            Selecciona un archivo de audio
+            <UploadIcon className='grow' />
           </label>
           {!wavesurferRef.current ? (
             <button
               onClick={handleInitialize}
-              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+              className="w-auto h-auto px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
             >
               Comenzar reproducción
             </button>
@@ -117,7 +125,7 @@ export default function WaveSurferPlayer() {
               className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
               disabled={!isReady}
             >
-              {isPlaying ? <PauseIcon /> : <PlayIcon />}
+              {isPlaying ? <PauseIcon className='grow' /> : <PlayIcon className='grow' />}
             </button>
           )}
 
